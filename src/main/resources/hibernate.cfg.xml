@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">
+            org.hibernate.dialect.HSQLDialect
+        </property>
+        <property name="hibernate.connection.driver_class">
+            org.hsqldb.jdbcDriver
+        </property>
+        <!-- Assume students is the database name -->
+        <property name="hibernate.connection.url">
+            jdbc:hsqldb:hsql://localhost/socialtunesdb
+        </property>
+        <property name="hibernate.connection.username">
+            sa
+        </property>
+        <property name="hibernate.hbm2ddl.auto">
+            update
+        </property>
+        <mapping class="Entity.User"/>
+        <mapping class="Entity.Song"/>
+        <mapping class="Entity.Playlist"/>
+        <mapping class="Entity.UserSong"/>
+    </session-factory>
+</hibernate-configuration>
