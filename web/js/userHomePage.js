@@ -10,6 +10,7 @@ var audio = new Audio();
 $(document).ready(function() {
     init();
 });
+
 function init(){
     var supportsAudio = !!document.createElement('audio').canPlayType;
     if(supportsAudio) {
