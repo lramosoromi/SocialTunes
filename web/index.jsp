@@ -21,7 +21,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -31,17 +31,40 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <form class="navbar-form navbar-right" action="LoginServlet" method="POST">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Username">
-                        <label style="color: red"> ${ usernameErrorMessage } </label>
+                    <div class="popover-markup">
+                        <a href="#" class="trigger" data-placement="bottom" >
+                            <span class="glyphicon glyphicon-log-in"></span>
+                            Log in
+                        </a>
+                        <a href="createUser.jsp"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
+                        <div class="head hide">
+                            Log In
+                        </div>
+                        <div class="content hide">
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                                <label style="color: red"> ${ usernameErrorMessage } </label>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="password" placeholder="Password">
+                                <label style="color: red"> ${ passwordErrorMessage } </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                        <div class="footer hide">test</div>
                     </div>
-                    <div class="form-group">
-                        <input class="form-control" type="password" name="password" placeholder="Password">
-                        <label style="color: red"> ${ passwordErrorMessage } </label>
-                    </div>
-                    <button type="submit" class="btn btn-success">Log in</button>
-                    <a href="createUser.jsp"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
                 </form>
+                <script>
+                    $('.popover-markup>.trigger').popover({
+                        html: true,
+                        title: function () {
+                            return $(this).parent().find('.head').html();
+                        },
+                        content: function () {
+                            return $(this).parent().find('.content').html();
+                        }
+                    });
+                </script>
             </div><!--/.navbar-collapse -->
         </div>
     </nav>
