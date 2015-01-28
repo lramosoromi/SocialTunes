@@ -13,61 +13,84 @@
 <html>
     <head>
         <title> User Home Page </title>
-        <link type="text/css" href="${pageContext.request.contextPath}/css/player.css" rel="stylesheet" />
-        <link type="text/css" href="css/tabs.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/userHomePage.js"></script>
     </head>
     <body>
-        Welcome: ${ user.getName() } ${ user.getLastName() }
-        <br/>
-        <a href="http://localhost:8080/LogoutServlet"> Logout </a>
-        <br/>
-        <a href="userSettings.jsp"> Settings </a>
-        <br/>
-        <div id="cwrap">
-            <div id="nowPlay">
-                <h3 id="npAction">Paused:</h3>
-                <div id="npTitle"></div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">
+                    Welcome: ${ user.getName() } ${ user.getLastName() }
+                </a>
             </div>
-            <div id="audiowrap">
-                <div id="audio0">
-                    <audio id="audio1" controls="controls">
-                        Your browser does not support the HTML5 Audio Tag.
-                    </audio>
-                </div>
-                <div id="extraControls">
-                    <button id="btnPrev" class="ctrlbtn">|&lt;&lt; Prev Track</button> <button id="btnNext" class="ctrlbtn">Next Track &gt;&gt;|</button>
-                </div>
-            </div>
-            <div id="plwrap">
-                <ul id="plUL">
+            <div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="userSettings.jsp"> Settings </a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="http://localhost:8080/LogoutServlet"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
                 </ul>
             </div>
-            <div id="playlistControls">
-                <button id="btnSave" onclick="savePlaylist()">Save Playlist</button>
-                <button id="btnErase">Erase Playlist</button>
-            </div>
         </div>
-        <br/>
-        <br/>
-        <form action="SearchFriendServlet" method="post">
-            Search friend:
-            <label> <input name="search"> </label>
-            <input type="submit" value="Search">
-            <br/>
-            ${ friendError }
-        </form>
-        <form enctype = "multipart/form-data" action = "UploadMusicServlet" method = "POST">
-            Upload File:
-            <input type = "file" name = "file">
-            <input type = "submit" value = "Upload Music">
-        </form>
-        <div class="tabs">
-            <div class="tab">
-                <input type="radio" id="tab-1" name="tab-group-1" checked>
-                <label for="tab-1">Trends</label>
-                <div class="content">
+    </nav>
+
+    <div class="container">
+        <div class="jumbotron">
+            <div id="cwrap">
+                <div id="nowPlay">
+                    <h3 id="npAction">Paused:</h3>
+                    <div id="npTitle"></div>
+                </div>
+                <div id="audiowrap">
+                    <div id="audio0">
+                        <audio id="audio1" controls="controls">
+                            Your browser does not support the HTML5 Audio Tag.
+                        </audio>
+                    </div>
+                    <div id="extraControls">
+                        <button id="btnPrev" class="ctrlbtn">|&lt;&lt; Prev Track</button> <button id="btnNext" class="ctrlbtn">Next Track &gt;&gt;|</button>
+                    </div>
+                </div>
+                <div id="plwrap">
+                    <ul id="plUL">
+                    </ul>
+                </div>
+                <div id="playlistControls">
+                    <button id="btnSave" onclick="savePlaylist()">Save Playlist</button>
+                    <button id="btnErase">Erase Playlist</button>
+                </div>
+            </div>
+            <a href="#" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-search"></span> Search</a>
+            <form action="SearchFriendServlet" method="post">
+                Search friend:
+                <label> <input name="search"> </label>
+                <input type="submit" value="Search">
+                <br/>
+                ${ friendError }
+            </form>
+            <form enctype = "multipart/form-data" action = "UploadMusicServlet" method = "POST">
+                Upload File:
+                <input type = "file" name = "file">
+                <input type = "submit" value = "Upload Music">
+            </form>
+        </div>
+
+
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="nav active"><a href="#A" data-toggle="tab">Trends</a></li>
+                <li class="nav"><a href="#B" data-toggle="tab">Songs</a></li>
+                <li class="nav"><a href="#C" data-toggle="tab">Friends</a></li>
+                <li class="nav"><a href="#D" data-toggle="tab">Lists</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="A">
                     <div id="recentlyListened">
                         Recently listened:
                         <c:forEach var="song" items="${ userDAO.listLastReproducedSongs(user.getUsername()) }" varStatus="index">
@@ -133,12 +156,8 @@
                         </c:forEach>
                     </div>
                 </div>
-            </div>
-            <div class="tab">
-                <input type="radio" id="tab-2" name="tab-group-1">
-                <label for="tab-2">Songs</label>
-                <div class="content">
-                    <div id="songs">
+                <div class="tab-pane fade" id="B">
+                    <div id="songsList">
                         <c:forEach var="song" items="${userDAO.listSongs(user.getUsername())}">
                             Title:
                             <c:out value="${ song.getTitle() }" />
@@ -153,12 +172,8 @@
                         </c:forEach>
                     </div>
                 </div>
-            </div>
-            <div class="tab">
-                <input type="radio" id="tab-3" name="tab-group-1">
-                <label for="tab-3">Friends</label>
-                <div class="content">
-                    <div id="friends">
+                <div class="tab-pane fade" id="C">
+                    <div id="friendsList">
                         <c:forEach var="user" items="${ userDAO.listFriends(user.getUsername()) }">
                             <c:out value="${ user.getName()}"/>
                             <c:out value="${ user.getLastName()}"/>
@@ -166,12 +181,8 @@
                         </c:forEach>
                     </div>
                 </div>
-            </div>
-            <div class="tab">
-                <input type="radio" id="tab-4" name="tab-group-1">
-                <label for="tab-4">Lists</label>
-                <div class="content">
-                    <div id="lists">
+                <div class="tab-pane fade" id="D">
+                    <div id="listsList">
                         <c:forEach var="playlist" items="${ userDAO.listPlaylists(user.getUsername()) }">
                             <a id="${ playlist.getPlaylistName() }" href="#" onclick="loadPlaylist(this.id)">
                                 <c:out value="${ playlist.getPlaylistName()}"/>
@@ -284,5 +295,6 @@
             </c:forEach>
         </div>
 --%>
+    </div>
     </body>
 </html>

@@ -32,29 +32,44 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <form class="navbar-form navbar-right" action="LoginServlet" method="POST">
                     <div class="popover-markup">
-                        <a href="#" class="trigger" data-placement="bottom" >
+                        <a href="#" class="trigger" data-placement="bottom">
                             <span class="glyphicon glyphicon-log-in"></span>
                             Log in
                         </a>
-                        <a href="createUser.jsp"><span class="glyphicon glyphicon-user"></span> Sign Up</a>
                         <div class="head hide">
                             Log In
                         </div>
                         <div class="content hide">
                             <div class="form-group">
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Username">
-                                <label style="color: red"> ${ usernameErrorMessage } </label>
+                                <label id="usernameError" style="color: red"> ${ usernameErrorMessage } </label>
                             </div>
                             <div class="form-group">
                                 <input class="form-control" type="password" name="password" placeholder="Password">
-                                <label style="color: red"> ${ passwordErrorMessage } </label>
+                                <label id="passwordError" style="color: red"> ${ passwordErrorMessage } </label>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                         <div class="footer hide">test</div>
                     </div>
+                    <a href="createUser.jsp">
+                        <span class="glyphicon glyphicon-user"></span>
+                        Sign Up
+                    </a>
                 </form>
-                <script>
+
+                <script type="application/javascript">
+                    var username;
+                    var password;
+
+                    $(document).ready(function() {
+                        username = $('#usernameError').text();
+                        password = $('#passwordError').text();
+                        if(username.trim() == "Username is non existent" || password.trim() == "Password is incorrect for this user"){
+                            $('.popover-markup>.trigger').popover('show');
+                        }
+                    });
+
                     $('.popover-markup>.trigger').popover({
                         html: true,
                         title: function () {
