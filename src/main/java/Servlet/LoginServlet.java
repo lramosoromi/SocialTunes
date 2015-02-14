@@ -42,21 +42,21 @@ public class LoginServlet extends HttpServlet {
         User user = userDAO.getUser(loginFormUsername);
 
         if (user == null){
-            request.getSession().removeAttribute("passwordErrorMessage");
-            request.getSession().setAttribute("usernameErrorMessage", "Username is non existent");
+            request.getSession().removeAttribute("passwordLoginErrorMessage");
+            request.getSession().setAttribute("usernameLoginErrorMessage", "Username is non existent");
         // get back to the referer page using redirect
             response.sendRedirect(request.getHeader("Referer"));
         }
         else if (!loginFormPassword.equals(user.getPassword())){
-            request.getSession().removeAttribute("usernameErrorMessage");
-            request.getSession().setAttribute("passwordErrorMessage", "Password is incorrect for this user");
+            request.getSession().removeAttribute("usernameLoginErrorMessage");
+            request.getSession().setAttribute("passwordLoginErrorMessage", "Password is incorrect for this user");
         // get back to the referer page using redirect
             response.sendRedirect(request.getHeader("Referer"));
         }
         else {
             HttpSession session = request.getSession();
-            session.removeAttribute("usernameErrorMessage");
-            session.removeAttribute("passwordErrorMessage");
+            session.removeAttribute("usernameLoginErrorMessage");
+            session.removeAttribute("passwordLoginErrorMessage");
             session.setAttribute("user", user);
             session.setAttribute("userDAO", userDAO);
             session.setAttribute("songDAO", songDAO);

@@ -116,30 +116,85 @@ function setSong(parameter) {
         data: { songTitle: parameter }
     });
 }
-function addSong(song) {
+function addSong(songTitle) {
     var exists = false;
     for (var i = 0; i < tracks.length; i++){
-        if (tracks[i] != null && tracks[i].localeCompare(song) == 0){
+        if (tracks[i] != null && tracks[i].localeCompare(songTitle) == 0){
             exists = true;
         }
     }
     if (!exists){
         var ul = document.getElementById("plUL");
         var li = document.createElement("li");
-        var a = document.createElement("a");
-        a.setAttribute("id", song);
-        a.setAttribute("href", "#");
-        a.setAttribute("onclick", "setSong(this.id)");
-        a.appendChild(document.createTextNode(song));
-        li.appendChild(a);
+        var columnTitle = document.createElement("a");
+        var divColumnArtist = document.createElement("div");
+        var divColumnAlbum = document.createElement("div");
+        var divColumnGenre = document.createElement("div");
+        var divColumnDuration = document.createElement("div");
+
+        columnTitle.setAttribute("id", songTitle);
+        columnTitle.setAttribute("class", "col-md-2");
+        columnTitle.setAttribute("href", "#");
+        columnTitle.setAttribute("onclick", "setSong(this.id)");
+        columnTitle.appendChild(document.createTextNode(songTitle));
+        divColumnArtist.setAttribute("class", "col-md-2");
+        divColumnArtist.appendChild(document.createTextNode(songTitle));
+        divColumnAlbum.setAttribute("class", "col-md-2");
+        divColumnAlbum.appendChild(document.createTextNode(songTitle));
+        divColumnGenre.setAttribute("class", "col-md-2");
+        divColumnGenre.appendChild(document.createTextNode(songTitle));
+        divColumnDuration.setAttribute("class", "col-md-2");
+        divColumnDuration.appendChild(document.createTextNode(songTitle));
+        li.setAttribute("class", "row");
+        li.appendChild(columnTitle);
+        li.appendChild(divColumnArtist);
+        li.appendChild(divColumnAlbum);
+        li.appendChild(divColumnGenre);
+        li.appendChild(divColumnDuration);
         ul.appendChild(li);
-        tracks[addIndex] = song;
+        tracks[addIndex] = songTitle;
         addIndex ++;
         trackCount = tracks.length;
         reloadPage = true;
-        init()
+        init();
+
+        /*
+                var divContainer = document.getElementById("plUL");
+                var divRow = document.createElement("div");
+                var columnTitle = document.createElement("a");
+                var divColumnArtist = document.createElement("div");
+                var divColumnAlbum = document.createElement("div");
+                var divColumnGenre = document.createElement("div");
+                var divColumnDuration = document.createElement("div");
+
+                divRow.setAttribute("class", "row")
+                divRow.setAttribute("id", songTitle);
+                divRow.setAttribute("href", "#");
+                divRow.setAttribute("onclick", "setSong(this.id)");
+                columnTitle.setAttribute("class", "col-md-2");
+                divColumnArtist.setAttribute("class", "col-md-2");
+                divColumnAlbum.setAttribute("class", "col-md-2");
+                divColumnGenre.setAttribute("class", "col-md-2");
+                divColumnDuration.setAttribute("class", "col-md-2");
+                columnTitle.appendChild(document.createTextNode(songTitle));
+                divColumnArtist.appendChild(document.createTextNode(songTitle));
+                divColumnAlbum.appendChild(document.createTextNode(songTitle));
+                divColumnGenre.appendChild(document.createTextNode(songTitle));
+                divColumnDuration.appendChild(document.createTextNode(songTitle));
+
+                divRow.appendChild(columnTitle);
+                divRow.appendChild(divColumnArtist);
+                divRow.appendChild(divColumnAlbum);
+                divRow.appendChild(divColumnGenre);
+                divRow.appendChild(divColumnDuration);
+                divContainer.appendChild(divRow);
+                tracks[addIndex] = songTitle;
+                addIndex ++;
+                trackCount = tracks.length;
+        */
     }
 }
+
 function savePlaylist() {
     var i;
     var queryString = "";

@@ -17,32 +17,61 @@
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/userHomePage.js"></script>
+        <script type="text/javascript" src="js/bootsrap.file-input.js"></script>
     </head>
     <body>
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid">
+        <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand">
-                    Welcome: ${ user.getName() } ${ user.getLastName() }
-                </a>
+                <a class="navbar-brand">Welcome: ${ user.getName() } ${ user.getLastName() }</a>
             </div>
-            <div>
+            <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
-                    <li><a href="userSettings.jsp"> Settings </a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="http://localhost:8080/LogoutServlet"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
+                    <li><form class="navbar-form" role="search" action="SearchFriendServlet" method="post">
+                        <div class="input-group">
+                            <input type="text" class="form-control input-sm" placeholder="Search" name="search" id="srch-term">
+                            <label id="friendError" style="color: red"> ${ friendError } </label>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary btn-md" type="submit">
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </form></li>
+                    <li><a href="userSettings.jsp" style="color:#28a4c9"> Settings </a></li>
+                    <li><a href="http://localhost:8080/LogoutServlet" style="color:#28a4c9">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                        Logout
+                    </a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
+    <br/>
     <div class="container">
         <div class="jumbotron">
+            <div class="container">
+                <label>Upload Song:</label>
+                <form enctype = "multipart/form-data" action = "UploadMusicServlet" method = "POST">
+                    <div class="input-prepend">
+                        <input id="fileupload" class="btn btn-primary" title="Browse files" type="file" name="file"/>
+                        <span class="input-prepend-btn">
+                            <button class="btn btn-primary btn-sm btn-success" type="submit">
+                                <span class="glyphicon glyphicon-cloud-upload"></span>
+                                <span>Upload</span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+
             <div id="cwrap">
                 <div id="nowPlay">
-                    <h3 id="npAction">Paused:</h3>
+                    <label id="npAction">Paused:</label>
                     <div id="npTitle"></div>
                 </div>
                 <div id="audiowrap">
@@ -51,32 +80,45 @@
                             Your browser does not support the HTML5 Audio Tag.
                         </audio>
                     </div>
+                    <br/>
                     <div id="extraControls">
-                        <button id="btnPrev" class="ctrlbtn">|&lt;&lt; Prev Track</button> <button id="btnNext" class="ctrlbtn">Next Track &gt;&gt;|</button>
+                        <label>Playlist</label>
+                        <br/>
+                        <a href="#" id="btnPrev" class="btn ctrlbtn btn-lg">
+                            <span class="glyphicon glyphicon-step-backward"></span>
+                        </a>
+                        <a href="#" id="btnNext" class="btn ctrlbtn btn-lg">
+                            <span class="glyphicon glyphicon-step-forward"></span>
+                        </a>
+                        <a href="#" id="btnSave" class="btn" onclick="savePlaylist()">
+                            <span class="glyphicon glyphicon-floppy-save"></span>Save</a>
+                        <a href="#" id="btnErase" class="btn">
+                            <span class="glyphicon glyphicon-trash"></span>Delete</a>
                     </div>
                 </div>
                 <div id="plwrap">
-                    <ul id="plUL">
+                    <div class="row" id="plHeader">
+                        <div class="col-md-2">Title</div>
+                        <div class="col-md-2">Artist</div>
+                        <div class="col-md-2">Album</div>
+                        <div class="col-md-2">Genre</div>
+                        <div class="col-md-2">Duration</div>
+                    </div>
+                    <ul id="plUL" class="container list-unstyled">
                     </ul>
-                </div>
-                <div id="playlistControls">
-                    <button id="btnSave" onclick="savePlaylist()">Save Playlist</button>
-                    <button id="btnErase">Erase Playlist</button>
+<%--
+                    <div class="container" id="plUL">
+                        <div class="row">
+                            <div class="col-md-2">Title</div>
+                            <div class="col-md-2">Artist</div>
+                            <div class="col-md-2">Album</div>
+                            <div class="col-md-2">Genre</div>
+                            <div class="col-md-2">Duration</div>
+                        </div>
+                    </div>
+--%>
                 </div>
             </div>
-            <a href="#" class="btn btn-info btn-lg"><span class="glyphicon glyphicon-search"></span> Search</a>
-            <form action="SearchFriendServlet" method="post">
-                Search friend:
-                <label> <input name="search"> </label>
-                <input type="submit" value="Search">
-                <br/>
-                ${ friendError }
-            </form>
-            <form enctype = "multipart/form-data" action = "UploadMusicServlet" method = "POST">
-                Upload File:
-                <input type = "file" name = "file">
-                <input type = "submit" value = "Upload Music">
-            </form>
         </div>
 
 
@@ -87,7 +129,7 @@
                 <li class="nav"><a href="#C" data-toggle="tab">Friends</a></li>
                 <li class="nav"><a href="#D" data-toggle="tab">Lists</a></li>
             </ul>
-
+            <br/>
             <!-- Tab panes -->
             <div class="tab-content">
                 <div class="tab-pane fade in active" id="A">
@@ -167,6 +209,8 @@
                             <c:out value="${ song.getAlbum() }" />
                             Genre:
                             <c:out value="${ song.getGenre() }"/>
+                            Duration:
+                            <c:out value="${ song.getDuration() }"/>
                             <input type="button" value="Play" id="${ song.getTitle() }" onclick="addSong(this.id)"/>
                             <br/>
                         </c:forEach>
@@ -193,108 +237,12 @@
                 </div>
             </div>
         </div>
-<%--
-        Trends:
-        <br/>
-        <div id="trends">
-            <div id="recentlyListened">
-                Recently listened:
-                <c:forEach var="song" items="${ userDAO.listLastReproducedSongs(user.getUsername()) }" varStatus="index">
-                    <c:out value="${ song.getTitle() }"/>
-                    <c:choose>
-                        <c:when test="${index.isLast()}"> </c:when>
-                        <c:otherwise>
-                            -
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </div>
-            <div id="recommendedSongs">
-                Recommended to you:
-                <c:forEach var="song" items="${ userDAO.getRecommendedSongs(user.getUsername()) }" varStatus="index">
-                    <c:out value="${ song.getTitle() }"/>
-                    <c:choose>
-                        <c:when test="${index.isLast()}"> </c:when>
-                        <c:otherwise>
-                            -
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </div>
-            <div id="songTrends">
-                Songs:
-                <c:forEach var="song" items="${ songDAO.getTrendSongs() }" varStatus="index">
-                    <c:out value="${ song.getTitle() }"/>
-                    <c:choose>
-                        <c:when test="${index.isLast()}"> </c:when>
-                        <c:otherwise>
-                            -
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </div>
-            <div id="artistTrends">
-                Artists:
-                <c:forEach var="artist" items="${ songDAO.getTrendArtists() }" varStatus="index">
-                    <c:out value="${ artist }"/>
-                    <c:choose>
-                        <c:when test="${index.isLast()}"> </c:when>
-                        <c:otherwise>
-                            -
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </div>
-            <div id="genreTrends">
-                Genre:
-                <c:forEach var="genre" items="${ songDAO.getTrendGenre() }" varStatus="index">
-                    <c:out value="${ genre }"/>
-                    <c:choose>
-                        <c:when test="${index.isLast()}"> </c:when>
-                        <c:otherwise>
-                            -
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </div>
-        </div>
-        <br/>
-        Songs:
-        <br/>
-        <div id="songs">
-            <c:forEach var="song" items="${userDAO.listSongs(user.getUsername())}">
-                Title:
-                <c:out value="${ song.getTitle() }" />
-                Artist:
-                <c:out value="${ song.getArtist() }" />
-                Album:
-                <c:out value="${ song.getAlbum() }" />
-                Genre:
-                <c:out value="${ song.getGenre() }"/>
-                <input type="button" value="Play" id="${ song.getTitle() }" onclick="addSong(this.id)"/>
-                <br/>
-            </c:forEach>
-        </div>
-        <br/>
-        Friends:
-        <div id="friends">
-            <c:forEach var="user" items="${ userDAO.listFriends(user.getUsername()) }">
-                <c:out value="${ user.getName()}"/>
-                <c:out value="${ user.getLastName()}"/>
-                <br/>
-            </c:forEach>
-        </div>
-        <br/>
-        Lists:
-        <div id="lists">
-            <c:forEach var="playlist" items="${ userDAO.listPlaylists(user.getUsername()) }">
-                <a id="${ playlist.getPlaylistName() }" href="#" onclick="loadPlaylist(this.id)">
-                    <c:out value="${ playlist.getPlaylistName()}"/>
-                </a>
-                <br/>
-            </c:forEach>
-        </div>
---%>
+
+        <hr>
+
+        <footer>
+            <p>&copy; Lucas Ramos 2015</p>
+        </footer>
     </div>
     </body>
 </html>

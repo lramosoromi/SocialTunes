@@ -1,7 +1,6 @@
 package EntityDAO;
 
 import Entity.Song;
-import Entity.UserSong;
 import Hibernate.HibernateUtil;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
@@ -9,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.AudioHeader;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
@@ -47,12 +47,15 @@ public class SongDAO {
         Song song = new Song();
 
         AudioFile audioFile = AudioFileIO.read(file);
+        AudioHeader header = audioFile.getAudioHeader();
         Tag tag = audioFile.getTag();
 
         String artist = tag.getFirst(FieldKey.ARTIST);
         String title = tag.getFirst(FieldKey.TITLE);
         String album = tag.getFirst(FieldKey.ALBUM);
         String genre = tag.getFirst(FieldKey.GENRE);
+        int duration = header.getTrackLength();
+
         if (album.equals("")){
             album = "Unknown";
         }
@@ -63,12 +66,14 @@ public class SongDAO {
         System.out.println("Title: " + title);
         System.out.println("Album: " + album);
         System.out.println("Genre: " + genre);
+        System.out.println("Duration: " + duration);
         try{
             tx = session.beginTransaction();
             song.setTitle(title);
             song.setArtist(artist);
             song.setAlbum(album);
             song.setGenre(genre);
+            song.setDuration(duration);
             Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
             song.setData(blob);
             session.save(song);

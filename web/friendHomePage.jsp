@@ -12,7 +12,6 @@
 <html>
     <head>
         <title> Friend Home Page </title>
-        <link type="text/css" href="css/tabs.css" rel="stylesheet">
     </head>
     <body>
         ${ friend.getName() }

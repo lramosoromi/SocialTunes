@@ -26,6 +26,9 @@ public class Song {
     @Column (name = "genre")
     private String genre;
 
+    @Column (name = "duration")
+    private int duration;
+
     @Column (name = "data", length = 200 * 1024 * 1024)
     @Lob
     private Blob data;
@@ -46,6 +49,9 @@ public class Song {
 
     public String getGenre() { return genre; }
     public void setGenre(String genre) { this.genre = genre; }
+
+    public int getDuration() { return duration; }
+    public void setDuration(int duration) { this.duration = duration; }
 
     public Blob getData() { return data; }
     public void setData(Blob data) { this.data = data; }

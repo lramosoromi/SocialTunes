@@ -8,25 +8,59 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="createUser.jsp"%>
 <html>
     <head>
         <title>Home Page</title>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
-        <script src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
         <% SongDAO songDAO = new SongDAO(); %>
     </head>
     <body>
+    <script type="text/javascript">
+        var usernameLogin;
+        var passwordLogin;
+        var email;
+        var usernameSignIn;
+        var passwordSignIn;
+        var passwordEqual;
+        var emptyInput;
+
+        $(document).ready(function() {
+            $('.trigger').popover({
+                html: true,
+                title: function () {
+                    return $(this).parent().find('.head').html();
+                },
+                content: function () {
+                    return $(this).parent().find('.content').html();
+                }
+            });
+
+            usernameLogin = $('#usernameLoginError').text();
+            passwordLogin = $('#passwordLoginError').text();
+            if(usernameLogin.trim() == "Username is non existent" || passwordLogin.trim() == "Password is incorrect for this user"){
+                $('.trigger').popover('show');
+            }
+
+            email = $('#emailError').text();
+            usernameSignIn = $('#usernameSignInError').text();
+            passwordSignIn = $('#passwordSignInError').text();
+            passwordEqual = $('#passwordEqualError').text();
+            emptyInput = $('#emptyInputError').text();
+            if(email.trim() == "The email is already associated to another user" || usernameSignIn.trim() == "The username si already used by another user"
+                    || passwordSignIn.trim() == "The password si already used by another user" || passwordEqual.trim() == "The passwords dose not coincide"
+                    || emptyInput.trim() == "All the fields should be completed"){
+                $('#myModal').modal('show');
+            }
+        });
+    </script>
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
                 <a class="navbar-brand">Social Tunes</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
@@ -42,44 +76,21 @@
                         <div class="content hide">
                             <div class="form-group">
                                 <input type="text" class="form-control" id="username" name="username" placeholder="Username">
-                                <label id="usernameError" style="color: red"> ${ usernameErrorMessage } </label>
+                                <label id="usernameLoginError" style="color: red"> ${ usernameLoginErrorMessage } </label>
                             </div>
                             <div class="form-group">
                                 <input class="form-control" type="password" name="password" placeholder="Password">
-                                <label id="passwordError" style="color: red"> ${ passwordErrorMessage } </label>
+                                <label id="passwordLoginError" style="color: red"> ${ passwordLoginErrorMessage } </label>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                         <div class="footer hide">test</div>
                     </div>
-                    <a href="createUser.jsp">
+                    <a href="#" data-toggle="modal" data-target="#myModal">
                         <span class="glyphicon glyphicon-user"></span>
                         Sign Up
                     </a>
                 </form>
-
-                <script type="application/javascript">
-                    var username;
-                    var password;
-
-                    $(document).ready(function() {
-                        username = $('#usernameError').text();
-                        password = $('#passwordError').text();
-                        if(username.trim() == "Username is non existent" || password.trim() == "Password is incorrect for this user"){
-                            $('.popover-markup>.trigger').popover('show');
-                        }
-                    });
-
-                    $('.popover-markup>.trigger').popover({
-                        html: true,
-                        title: function () {
-                            return $(this).parent().find('.head').html();
-                        },
-                        content: function () {
-                            return $(this).parent().find('.content').html();
-                        }
-                    });
-                </script>
             </div><!--/.navbar-collapse -->
         </div>
     </nav>

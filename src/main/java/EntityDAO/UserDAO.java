@@ -460,10 +460,14 @@ public class UserDAO {
                 }
                 else {
                     int itLimit = trendArtistSongs.size();
+                    boolean artistAppears = false;
                     for(int i = 0; i < itLimit; i++){
-                        if(song.getArtist().compareTo(trendArtistSongs.get(i)) != 0){
-                            trendArtistSongs.add(song.getArtist());
+                        if(song.getArtist().compareTo(trendArtistSongs.get(i)) == 0){
+                            artistAppears = true;
                         }
+                    }
+                    if (!artistAppears){
+                        trendArtistSongs.add(song.getArtist());
                     }
                 }
                 iterations ++;
@@ -483,10 +487,14 @@ public class UserDAO {
                 }
                 else {
                     int itLimit = trendGenreSongs.size();
+                    boolean genreAppears = false;
                     for(int i = 0; i < itLimit; i++){
-                        if(song.getGenre().compareTo(trendGenreSongs.get(i)) != 0){
-                            trendGenreSongs.add(song.getGenre());
+                        if(song.getGenre().compareTo(trendGenreSongs.get(i)) == 0){
+                            genreAppears = true;
                         }
+                    }
+                    if (!genreAppears){
+                        trendGenreSongs.add(song.getGenre());
                     }
                 }
                 iterations ++;

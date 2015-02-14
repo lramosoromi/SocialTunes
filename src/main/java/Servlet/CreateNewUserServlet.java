@@ -36,8 +36,8 @@ public class CreateNewUserServlet extends HttpServlet {
                 confirmPassword.equals("")){
             request.getSession().setAttribute("emptyInputErrorMessage", "All the fields should be completed");
             request.getSession().removeAttribute("emailErrorMessage");
-            request.getSession().removeAttribute("usernameErrorMessage");
-            request.getSession().removeAttribute("passwordErrorMessage");
+            request.getSession().removeAttribute("usernameSignInErrorMessage");
+            request.getSession().removeAttribute("passwordSignInErrorMessage");
             request.getSession().removeAttribute("passwordEqualErrorMessage");
             error = true;
         }
@@ -47,24 +47,24 @@ public class CreateNewUserServlet extends HttpServlet {
             if (user.getEmail().equals(email)){
                 request.getSession().setAttribute("emailErrorMessage", "The email is already associated to another user");
                 request.getSession().removeAttribute("emptyInputErrorMessage");
-                request.getSession().removeAttribute("usernameErrorMessage");
-                request.getSession().removeAttribute("passwordErrorMessage");
+                request.getSession().removeAttribute("usernameSignInErrorMessage");
+                request.getSession().removeAttribute("passwordSignInErrorMessage");
                 request.getSession().removeAttribute("passwordEqualErrorMessage");
                 error = true;
             }
             else if (user.getUsername().equals(username)){
-                request.getSession().setAttribute("usernameErrorMessage", "The username si already used by another user");
+                request.getSession().setAttribute("usernameSignInErrorMessage", "The username si already used by another user");
                 request.getSession().removeAttribute("emptyInputErrorMessage");
                 request.getSession().removeAttribute("emailErrorMessage");
-                request.getSession().removeAttribute("passwordErrorMessage");
+                request.getSession().removeAttribute("passwordSignInErrorMessage");
                 request.getSession().removeAttribute("passwordEqualErrorMessage");
                 error = true;
             }
             else if (user.getPassword().equals(password)){
-                request.getSession().setAttribute("passwordErrorMessage", "The password si already used by another user");
+                request.getSession().setAttribute("passwordSignInErrorMessage", "The password si already used by another user");
                 request.getSession().removeAttribute("emptyInputErrorMessage");
                 request.getSession().removeAttribute("emailErrorMessage");
-                request.getSession().removeAttribute("usernameErrorMessage");
+                request.getSession().removeAttribute("usernameSignInErrorMessage");
                 request.getSession().removeAttribute("passwordEqualErrorMessage");
                 error = true;
             }
@@ -73,14 +73,19 @@ public class CreateNewUserServlet extends HttpServlet {
             request.getSession().setAttribute("passwordEqualErrorMessage", "The passwords dose not coincide");
             request.getSession().removeAttribute("emptyInputErrorMessage");
             request.getSession().removeAttribute("emailErrorMessage");
-            request.getSession().removeAttribute("usernameErrorMessage");
-            request.getSession().removeAttribute("passwordErrorMessage");
+            request.getSession().removeAttribute("usernameSignInErrorMessage");
+            request.getSession().removeAttribute("passwordSignInErrorMessage");
             error = true;
         }
         if (!error){
             User user = userDAO.addUser(username, password, name, last_name, email);
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            request.getSession().removeAttribute("emptyInputErrorMessage");
+            request.getSession().removeAttribute("emailErrorMessage");
+            request.getSession().removeAttribute("usernameSignInErrorMessage");
+            request.getSession().removeAttribute("passwordSignInErrorMessage");
+            request.getSession().removeAttribute("passwordEqualErrorMessage");
             request.getRequestDispatcher("/userHomePage.jsp").forward(request, response);
         }
         else {
