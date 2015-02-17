@@ -3,7 +3,6 @@ package Servlet;
 import Entity.Playlist;
 import Entity.Song;
 import Entity.User;
-import EntityDAO.SongDAO;
 import EntityDAO.UserDAO;
 
 import javax.servlet.ServletException;
@@ -14,10 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by skylight on 11/07/14.
+ * Created by skylight on 17/02/2015.
  */
-@WebServlet(name = "SavePlaylistServlet", urlPatterns = {"/SavePlaylistServlet"})
-public class SavePlaylistServlet extends HttpServlet{
+@WebServlet(name = "DeletePlaylistServlet", urlPatterns = {"/DeletePlaylistServlet"})
+public class DeletePlaylistServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

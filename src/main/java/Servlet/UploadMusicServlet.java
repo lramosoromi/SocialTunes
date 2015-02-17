@@ -41,9 +41,11 @@ public class UploadMusicServlet extends HttpServlet {
             Song song = songDAO.addSong(file);
             User user = (User) request.getSession().getAttribute("user");
             userDAO.addSong(user.getUsername(), song);
+            request.removeAttribute("uploadSongErrorMessage");
             request.getRequestDispatcher("/userHomePage.jsp").forward(request, response);
         } catch (SQLException | TagException | ReadOnlyFileException | CannotReadException | InvalidAudioFrameException e) {
-            e.printStackTrace();
+            request.setAttribute("uploadSongErrorMessage", "File type is not supported");
+            request.getRequestDispatcher("/userHomePage.jsp").forward(request, response);
         }
     }
 

@@ -6,8 +6,26 @@ var addIndex = 0;
 var trackCount = 0;
 var reloadPage = false;
 var audio = new Audio();
+var songTitle = "";
+var songArtist = "";
+var songAlbum = "";
+var songGenre = "";
+var songDuration = "";
 
 $(document).ready(function() {
+    var playlistName = $('#playlistNameError').text();
+    var newEmail = $('#newEmailError').text();
+    var newPassword = $('#newPasswrodError').text();
+    var newPasswordEqual = $('#newPasswordEqualError').text();
+
+    if (playlistName.trim() == "Playlist name already exists for another playlist"){
+        $('#savePlaylistModal').modal('show');
+    }
+    if (newEmail.trim() == "The email is already associated to another user" || newPassword.trim() == "The password si already used by another user"
+            || newPasswordEqual.trim() == "The passwords dose not coincide") {
+        $('#userSettingsModal').modal('show');
+    }
+
     init();
 });
 
@@ -65,19 +83,30 @@ function init(){
                     loadTrack(index);
                 }
             }),
-            li = $('#plUL').find('li').click(function() {
-                var id = parseInt($(this).index());
+            buttonPlay = $('#plUL').find('li').find('#playButton').click(function() {
+                var id = parseInt($(this).parent().parent().index());
                 if(id !== index) {
                     playTrack(id);
                     addReproduction(tracks[id]);
                 }
             }),
+            buttonDelete = $('#plUL').find('li').find('#deleteButton').click(function() {
+                var id = parseInt($(this).parent().parent().index());
+                var li = $(this).parent().parent();
+                var ul = document.getElementById('plUL');
+                alert("ul: " + ul + " li: " + li + " id: " + id);
+                tracks.splice(id,1);
+                addIndex --;
+                trackCount = tracks.length;
+                ul.removeChild(ul.childNodes[id + 1]);
+            }),
             erasePlaylist = $('#btnErase').click(function() {
+                var li;
                 tracks = [];
                 addIndex = 0;
                 trackCount = tracks.length;
                 var lis = document.querySelectorAll('#plUL li');
-                for(var i=0; li=lis[i]; i++) {
+                for(var i=0;li = lis[i]; i++) {
                     li.parentNode.removeChild(li);
                 }
                 audio.src = "";
@@ -116,8 +145,16 @@ function setSong(parameter) {
         data: { songTitle: parameter }
     });
 }
-function addSong(songTitle) {
+function addSong(parameter) {
     var exists = false;
+
+    var arrayParameter = parameter.trim().split(",");
+    songTitle = arrayParameter[0];
+    songArtist = arrayParameter[1];
+    songAlbum = arrayParameter[2];
+    songGenre = arrayParameter[3];
+    songDuration = arrayParameter[4];
+
     for (var i = 0; i < tracks.length; i++){
         if (tracks[i] != null && tracks[i].localeCompare(songTitle) == 0){
             exists = true;
@@ -126,75 +163,53 @@ function addSong(songTitle) {
     if (!exists){
         var ul = document.getElementById("plUL");
         var li = document.createElement("li");
-        var columnTitle = document.createElement("a");
+        var divColumnTitle = document.createElement("div");
         var divColumnArtist = document.createElement("div");
         var divColumnAlbum = document.createElement("div");
         var divColumnGenre = document.createElement("div");
         var divColumnDuration = document.createElement("div");
+        var divButtons = document.createElement("div");
+        var playButton = document.createElement("button");
+        var deleteButton = document.createElement("button");
+        var spanPlayGlyphicon = document.createElement("span");
+        var spanDeleteGlyphicon = document.createElement("span");
 
-        columnTitle.setAttribute("id", songTitle);
-        columnTitle.setAttribute("class", "col-md-2");
-        columnTitle.setAttribute("href", "#");
-        columnTitle.setAttribute("onclick", "setSong(this.id)");
-        columnTitle.appendChild(document.createTextNode(songTitle));
+        divColumnTitle.setAttribute("class", "col-md-2");
+        divColumnTitle.appendChild(document.createTextNode(songTitle));
         divColumnArtist.setAttribute("class", "col-md-2");
-        divColumnArtist.appendChild(document.createTextNode(songTitle));
+        divColumnArtist.appendChild(document.createTextNode(songArtist));
         divColumnAlbum.setAttribute("class", "col-md-2");
-        divColumnAlbum.appendChild(document.createTextNode(songTitle));
+        divColumnAlbum.appendChild(document.createTextNode(songAlbum));
         divColumnGenre.setAttribute("class", "col-md-2");
-        divColumnGenre.appendChild(document.createTextNode(songTitle));
+        divColumnGenre.appendChild(document.createTextNode(songGenre));
         divColumnDuration.setAttribute("class", "col-md-2");
-        divColumnDuration.appendChild(document.createTextNode(songTitle));
+        divColumnDuration.appendChild(document.createTextNode(songDuration));
+        divButtons.setAttribute("class", "col-md-2");
+        playButton.setAttribute("id", "playButton");
+        playButton.setAttribute("class", "btn btn-primary btn-sm col-md-6");
+        deleteButton.setAttribute("id", "deleteButton");
+        deleteButton.setAttribute("class", "btn btn-primary btn-sm col-md-6");
+        spanPlayGlyphicon.setAttribute("class", "glyphicon glyphicon-play");
+        spanDeleteGlyphicon.setAttribute("class", "glyphicon glyphicon-trash");
+        playButton.appendChild(spanPlayGlyphicon);
+        deleteButton.appendChild(spanDeleteGlyphicon);
+        divButtons.appendChild(playButton);
+        divButtons.appendChild(deleteButton);
         li.setAttribute("class", "row");
-        li.appendChild(columnTitle);
+        li.appendChild(divColumnTitle);
         li.appendChild(divColumnArtist);
         li.appendChild(divColumnAlbum);
         li.appendChild(divColumnGenre);
         li.appendChild(divColumnDuration);
+        li.appendChild(divButtons);
         ul.appendChild(li);
         tracks[addIndex] = songTitle;
         addIndex ++;
         trackCount = tracks.length;
         reloadPage = true;
         init();
-
-        /*
-                var divContainer = document.getElementById("plUL");
-                var divRow = document.createElement("div");
-                var columnTitle = document.createElement("a");
-                var divColumnArtist = document.createElement("div");
-                var divColumnAlbum = document.createElement("div");
-                var divColumnGenre = document.createElement("div");
-                var divColumnDuration = document.createElement("div");
-
-                divRow.setAttribute("class", "row")
-                divRow.setAttribute("id", songTitle);
-                divRow.setAttribute("href", "#");
-                divRow.setAttribute("onclick", "setSong(this.id)");
-                columnTitle.setAttribute("class", "col-md-2");
-                divColumnArtist.setAttribute("class", "col-md-2");
-                divColumnAlbum.setAttribute("class", "col-md-2");
-                divColumnGenre.setAttribute("class", "col-md-2");
-                divColumnDuration.setAttribute("class", "col-md-2");
-                columnTitle.appendChild(document.createTextNode(songTitle));
-                divColumnArtist.appendChild(document.createTextNode(songTitle));
-                divColumnAlbum.appendChild(document.createTextNode(songTitle));
-                divColumnGenre.appendChild(document.createTextNode(songTitle));
-                divColumnDuration.appendChild(document.createTextNode(songTitle));
-
-                divRow.appendChild(columnTitle);
-                divRow.appendChild(divColumnArtist);
-                divRow.appendChild(divColumnAlbum);
-                divRow.appendChild(divColumnGenre);
-                divRow.appendChild(divColumnDuration);
-                divContainer.appendChild(divRow);
-                tracks[addIndex] = songTitle;
-                addIndex ++;
-                trackCount = tracks.length;
-        */
     }
 }
-
 function savePlaylist() {
     var i;
     var queryString = "";
@@ -210,8 +225,11 @@ function savePlaylist() {
         url: 'http://localhost:8080/SetPlaylistAttributeServlet',
         data: { songs: queryString }
     });
-    window.location.replace("http://localhost:8080/savePlaylist.jsp");
     audio.src = "";
+}
+function deletePlaylist(playlistLongName) {
+    var playlistName = playlistLongName.substring(6,playlistLongName.length);
+    alert(playlistName);
 }
 function loadPlaylist(playlistName) {
     tracks = [];

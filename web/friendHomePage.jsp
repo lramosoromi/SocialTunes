@@ -12,23 +12,48 @@
 <html>
     <head>
         <title> Friend Home Page </title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/bootsrap.file-input.js"></script>
     </head>
     <body>
-        ${ friend.getName() }
-        ${ friend.getLastName() }
-        <br/>
-        <br/>
-        <a href="http://localhost:8080/LogoutServlet"> Logout </a>
-        <br/>
-        <form action="AddFriendServlet" method="post">
-            <input type="submit" value="AddFriend">
-        </form>
-        <br/>
-        <div class="tabs">
-            <div class="tab">
-                <input type="radio" id="tab-1" name="tab-group-1" checked>
-                <label for="tab-1">Songs</label>
-                <div class="content">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">${ friend.getName() } ${ friend.getLastName() } Page</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="userSettings.jsp" style="color:#28a4c9"> Settings </a></li>
+                    <li><a href="http://localhost:8080/LogoutServlet" style="color:#28a4c9">
+                        <span class="glyphicon glyphicon-log-out"></span>
+                        Logout
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br/>
+    <div class="container">
+        <div class="jumbotron">
+            <div class="container">
+                <form action="AddFriendServlet" method="post">
+                    <input type="submit" value="AddFriend">
+                </form>
+            </div>
+        </div>
+
+        <div class="container">
+            <ul class="nav nav-tabs">
+                <li class="nav active"><a href="#A" data-toggle="tab">Songs</a></li>
+                <li class="nav"><a href="#B" data-toggle="tab">Friends</a></li>
+                <li class="nav"><a href="#C" data-toggle="tab">Lists</a></li>
+            </ul>
+            <br/>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="A">
                     <div id="songs">
                         <c:forEach var="song" items="${userDAO.listSongs(friend.getUsername())}">
                             Title:
@@ -43,11 +68,7 @@
                         </c:forEach>
                     </div>
                 </div>
-            </div>
-            <div class="tab">
-                <input type="radio" id="tab-2" name="tab-group-1">
-                <label for="tab-2">Friends</label>
-                <div class="content">
+                <div class="tab-pane fade" id="B">
                     <div id="friends">
                         <c:forEach var="user" items="${ userDAO.listFriends(friend.getUsername()) }">
                             <c:out value="${ user.getUsername()}"/>
@@ -56,11 +77,7 @@
                         </c:forEach>
                     </div>
                 </div>
-            </div>
-            <div class="tab">
-                <input type="radio" id="tab-3" name="tab-group-1">
-                <label for="tab-3">Lists</label>
-                <div class="content">
+                <div class="tab-pane fade" id="C">
                     <div id="lists">
                         <c:forEach var="playlist" items="${ userDAO.listPlaylists(friend.getUsername()) }">
                             <c:out value="${ playlist.getPlaylistName()}"/>
@@ -69,6 +86,13 @@
                     </div>
                 </div>
             </div>
-         </div>
+        </div>
+
+        <hr>
+
+        <footer>
+            <p>&copy; Lucas Ramos 2015</p>
+        </footer>
+    </div>
     </body>
 </html>

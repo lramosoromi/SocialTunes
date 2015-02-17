@@ -430,6 +430,28 @@ public class UserDAO {
             session.close();
         }
     }
+    /* Method to delete a PLAYLIST from the user */
+    public void deletePlaylist(String username, Playlist playlist){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        User user;
+        try{
+            tx = session.beginTransaction();
+            if (this.isUser(session, username)){
+                user = (User)session.get(User.class, username);
+
+                //TENGO Q ENCONTRAR LA PLAYLIST Q VALE
+
+                user.deletePlaylist(playlist);
+            }
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+    }
     /*Method to CHECK if there is a user on the records */
     private boolean isUser(Session session, String username){
         Transaction tx = null;

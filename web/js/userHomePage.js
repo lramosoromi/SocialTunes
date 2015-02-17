@@ -13,6 +13,19 @@ var songGenre = "";
 var songDuration = "";
 
 $(document).ready(function() {
+    var playlistName = $('#playlistNameError').text();
+    var newEmail = $('#newEmailError').text();
+    var newPassword = $('#newPasswrodError').text();
+    var newPasswordEqual = $('#newPasswordEqualError').text();
+
+    if (playlistName.trim() == "Playlist name already exists for another playlist"){
+        $('#savePlaylistModal').modal('show');
+    }
+    if (newEmail.trim() == "The email is already associated to another user" || newPassword.trim() == "The password si already used by another user"
+            || newPasswordEqual.trim() == "The passwords dose not coincide") {
+        $('#userSettingsModal').modal('show');
+    }
+
     init();
 });
 
@@ -197,7 +210,6 @@ function addSong(parameter) {
         init();
     }
 }
-
 function savePlaylist() {
     var i;
     var queryString = "";
@@ -213,8 +225,16 @@ function savePlaylist() {
         url: 'http://localhost:8080/SetPlaylistAttributeServlet',
         data: { songs: queryString }
     });
-    window.location.replace("http://localhost:8080/savePlaylist.jsp");
     audio.src = "";
+}
+function deletePlaylist(playlistLongName) {
+    var playlistName = playlistLongName.substring(6,playlistLongName.length);
+    $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: 'http://localhost:8080/SetPlaylistAttributeServlet',
+        data: {playlistName: playlistName}
+    });
 }
 function loadPlaylist(playlistName) {
     tracks = [];

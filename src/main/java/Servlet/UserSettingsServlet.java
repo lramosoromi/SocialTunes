@@ -33,23 +33,23 @@ public class UserSettingsServlet extends HttpServlet {
         for (Object user1 : users) {
             User aUser = (User) user1;
             if (aUser.getEmail().equals(email)){
-                request.getSession().setAttribute("emailErrorMessage", "The email is already associated to another user");
-                request.getSession().removeAttribute("passwordErrorMessage");
-                request.getSession().removeAttribute("passwordEqualErrorMessage");
+                request.getSession().setAttribute("newEmailErrorMessage", "The email is already associated to another user");
+                request.getSession().removeAttribute("newPasswordErrorMessage");
+                request.getSession().removeAttribute("newPasswordEqualErrorMessage");
 
                 error = true;
             }
             else if (aUser.getPassword().equals(password)){
-                request.getSession().setAttribute("passwordErrorMessage", "The password si already used by another user");
-                request.getSession().removeAttribute("emailErrorMessage");
-                request.getSession().removeAttribute("passwordEqualErrorMessage");
+                request.getSession().setAttribute("newPasswordErrorMessage", "The password si already used by another user");
+                request.getSession().removeAttribute("newEmailErrorMessage");
+                request.getSession().removeAttribute("newPasswordEqualErrorMessage");
                 error = true;
             }
         }
         if (!password.equals(confirmPassword)){
-            request.getSession().setAttribute("passwordEqualErrorMessage", "The passwords dose not coincide");
-            request.getSession().removeAttribute("emailErrorMessage");
-            request.getSession().removeAttribute("passwordErrorMessage");
+            request.getSession().setAttribute("newPasswordEqualErrorMessage", "The passwords dose not coincide");
+            request.getSession().removeAttribute("newEmailErrorMessage");
+            request.getSession().removeAttribute("newPasswordErrorMessage");
             error = true;
         }
         if (!error){
@@ -58,7 +58,7 @@ public class UserSettingsServlet extends HttpServlet {
             request.getRequestDispatcher("/userHomePage.jsp").forward(request, response);
         }
         else {
-            response.sendRedirect(request.getHeader("Referer"));
+            request.getRequestDispatcher("/userHomePage.jsp").forward(request, response);
         }
     }
 }

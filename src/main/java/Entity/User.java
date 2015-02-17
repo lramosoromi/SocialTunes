@@ -44,10 +44,10 @@ public class User {
     @ManyToMany(mappedBy="friends")
     private Set<User> friendsOf = new HashSet<>(0);
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "USER_PLAYLIST", joinColumns = { @JoinColumn(name = "username") },
             inverseJoinColumns = { @JoinColumn(name = "playlistName") })
-    private Set<Playlist> playlists;
+    private Set<Playlist> playlists = new HashSet<>(0);
 
 
     public User(){}
@@ -89,4 +89,5 @@ public class User {
     public Set<Playlist> getPlaylists() { return playlists; }
     public void setPlaylists(Set<Playlist> playLists) { this.playlists = playLists; }
     public void addPlaylist(Playlist playlist) { playlists.add(playlist); }
+    public void deletePlaylist(Playlist playlist) { playlists.remove(playlist); }
 }

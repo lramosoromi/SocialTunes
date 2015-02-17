@@ -53,7 +53,7 @@
             if(email.trim() == "The email is already associated to another user" || usernameSignIn.trim() == "The username si already used by another user"
                     || passwordSignIn.trim() == "The password si already used by another user" || passwordEqual.trim() == "The passwords dose not coincide"
                     || emptyInput.trim() == "All the fields should be completed"){
-                $('#myModal').modal('show');
+                $('#createUserModal').modal('show');
             }
         });
     </script>
@@ -86,7 +86,7 @@
                         </div>
                         <div class="footer hide">test</div>
                     </div>
-                    <a href="#" data-toggle="modal" data-target="#myModal">
+                    <a href="#" data-toggle="modal" data-target="#createUserModal">
                         <span class="glyphicon glyphicon-user"></span>
                         Sign Up
                     </a>

@@ -10,6 +10,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="savePlaylist.jsp"%>
+<%@include file="userSettings.jsp"%>
 <html>
     <head>
         <title> User Home Page </title>
@@ -42,7 +44,7 @@
                             </span>
                         </div>
                     </form></li>
-                    <li><a href="userSettings.jsp" style="color:#28a4c9"> Settings </a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#userSettingsModal" style="color:#28a4c9"> Settings </a></li>
                     <li><a href="http://localhost:8080/LogoutServlet" style="color:#28a4c9">
                         <span class="glyphicon glyphicon-log-out"></span>
                         Logout
@@ -67,6 +69,7 @@
                         </span>
                     </div>
                 </form>
+                <label id="uploadSongError" style="color: red"> ${ uploadSongErrorMessage } </label>
             </div>
 
             <div id="cwrap">
@@ -90,10 +93,10 @@
                         <a href="#" id="btnNext" class="btn ctrlbtn btn-lg">
                             <span class="glyphicon glyphicon-step-forward"></span>
                         </a>
-                        <a href="#" id="btnSave" class="btn" onclick="savePlaylist()">
+                        <a href="#" id="btnSave" class="btn" data-toggle="modal" data-target="#savePlaylistModal" onclick="savePlaylist()">
                             <span class="glyphicon glyphicon-floppy-save"></span>Save</a>
                         <a href="#" id="btnErase" class="btn">
-                            <span class="glyphicon glyphicon-trash"></span>Delete</a>
+                            <span class="glyphicon glyphicon-trash"></span>Remove</a>
                     </div>
                 </div>
                 <div id="plwrap">
@@ -106,17 +109,6 @@
                     </div>
                     <ul id="plUL" class="container list-unstyled">
                     </ul>
-<%--
-                    <div class="container" id="plUL">
-                        <div class="row">
-                            <div class="col-md-2">Title</div>
-                            <div class="col-md-2">Artist</div>
-                            <div class="col-md-2">Album</div>
-                            <div class="col-md-2">Genre</div>
-                            <div class="col-md-2">Duration</div>
-                        </div>
-                    </div>
---%>
                 </div>
             </div>
         </div>
@@ -211,7 +203,11 @@
                             <c:out value="${ song.getGenre() }"/>
                             Duration:
                             <c:out value="${ song.getDuration() }"/>
-                            <input type="button" value="Play" id="${ song.getTitle() }" onclick="addSong(this.id)"/>
+                            <a href="#" class="btn btn-primary btn-sm"
+                                   id="${ song.getTitle() },${ song.getArtist() },${ song.getAlbum() },${ song.getGenre() },${ song.getDuration() }"
+                                   onclick="addSong(this.id)">
+                                <span class="glyphicon glyphicon-play"></span>
+                            </a>
                             <br/>
                         </c:forEach>
                     </div>
@@ -228,8 +224,12 @@
                 <div class="tab-pane fade" id="D">
                     <div id="listsList">
                         <c:forEach var="playlist" items="${ userDAO.listPlaylists(user.getUsername()) }">
-                            <a id="${ playlist.getPlaylistName() }" href="#" onclick="loadPlaylist(this.id)">
-                                <c:out value="${ playlist.getPlaylistName()}"/>
+                            <label> <c:out value="${ playlist.getPlaylistName()}"/> </label>
+                            <a id="${ playlist.getPlaylistName() }" href="#" class="btn btn-primary btn-sm" onclick="loadPlaylist(this.id)">
+                                <span class="glyphicon glyphicon-play"></span>
+                            </a>
+                            <a id="delete${ playlist.getPlaylistName() }" href="#" class="btn btn-primary btn-sm" onclick="deletePlaylist(this.id)">
+                                <span class="glyphicon glyphicon-trash"></span>
                             </a>
                             <br/>
                         </c:forEach>

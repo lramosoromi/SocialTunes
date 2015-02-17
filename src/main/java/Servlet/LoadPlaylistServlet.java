@@ -26,7 +26,7 @@ public class LoadPlaylistServlet extends HttpServlet {
         ArrayList<String> songs = new ArrayList<>();
 
         for (Song song : userDAO.listSongsOfPlaylist(user.getUsername(), playlistName)){
-            songs.add(song.getTitle());
+            songs.add(song.getTitle() + "," + song.getArtist() + "," + song.getAlbum() + "," + song.getGenre() + "," + song.getDuration());
         }
         String json = new Gson().toJson(songs);
         resp.setContentType("application/json");
