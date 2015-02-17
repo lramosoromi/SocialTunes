@@ -106,17 +106,6 @@
                     </div>
                     <ul id="plUL" class="container list-unstyled">
                     </ul>
-<%--
-                    <div class="container" id="plUL">
-                        <div class="row">
-                            <div class="col-md-2">Title</div>
-                            <div class="col-md-2">Artist</div>
-                            <div class="col-md-2">Album</div>
-                            <div class="col-md-2">Genre</div>
-                            <div class="col-md-2">Duration</div>
-                        </div>
-                    </div>
---%>
                 </div>
             </div>
         </div>
@@ -211,7 +200,9 @@
                             <c:out value="${ song.getGenre() }"/>
                             Duration:
                             <c:out value="${ song.getDuration() }"/>
-                            <input type="button" value="Play" id="${ song.getTitle() }" onclick="addSong(this.id)"/>
+                            <input type="button" value="Play"
+                                   id="${ song.getTitle() },${ song.getArtist() },${ song.getAlbum() },${ song.getGenre() },${ song.getDuration() }"
+                                   onclick="addSong(this.id)"/>
                             <br/>
                         </c:forEach>
                     </div>

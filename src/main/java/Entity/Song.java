@@ -50,7 +50,20 @@ public class Song {
     public String getGenre() { return genre; }
     public void setGenre(String genre) { this.genre = genre; }
 
-    public int getDuration() { return duration; }
+    public String getDuration() {
+        int songDurationHours = ( duration / 3600 ) % 24;
+        int songDurationMinutes = ( duration / 60 ) % 60;
+        int songDurationSeconds = duration % 60;
+        String durationHours = String.valueOf(songDurationHours);
+        String durationMinutes = String.valueOf(songDurationMinutes);
+        String durationSeconds = String.valueOf(songDurationSeconds);
+
+        if (songDurationHours <= 9) durationHours = "0" + songDurationHours;
+        if (songDurationMinutes <= 9) durationMinutes = "0" + songDurationMinutes;
+        if (songDurationSeconds <= 9) durationSeconds = "0" + songDurationSeconds;
+
+        return (durationHours + ":" + durationMinutes + ":" + durationSeconds);
+    }
     public void setDuration(int duration) { this.duration = duration; }
 
     public Blob getData() { return data; }
