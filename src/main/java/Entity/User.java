@@ -1,6 +1,7 @@
 package Entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -89,5 +90,10 @@ public class User {
     public Set<Playlist> getPlaylists() { return playlists; }
     public void setPlaylists(Set<Playlist> playLists) { this.playlists = playLists; }
     public void addPlaylist(Playlist playlist) { playlists.add(playlist); }
-    public void deletePlaylist(Playlist playlist) { playlists.remove(playlist); }
+    public void deleteAllPlaylists() {
+        for (Playlist playlist : playlists) {
+            playlist.erase();
+        }
+        playlists.clear();
+    }
 }

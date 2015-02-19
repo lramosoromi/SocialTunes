@@ -17,6 +17,7 @@ $(document).ready(function() {
     var newEmail = $('#newEmailError').text();
     var newPassword = $('#newPasswrodError').text();
     var newPasswordEqual = $('#newPasswordEqualError').text();
+    var searchInput = document.getElementById('srch-term');
 
     if (playlistName.trim() == "Playlist name already exists for another playlist"){
         $('#savePlaylistModal').modal('show');
@@ -25,7 +26,6 @@ $(document).ready(function() {
             || newPasswordEqual.trim() == "The passwords dose not coincide") {
         $('#userSettingsModal').modal('show');
     }
-
     init();
 });
 
@@ -229,7 +229,12 @@ function savePlaylist() {
 }
 function deletePlaylist(playlistLongName) {
     var playlistName = playlistLongName.substring(6,playlistLongName.length);
-    alert(playlistName);
+    $.ajax({
+        dataType: 'json',
+        type: 'POST',
+        url: 'http://localhost:8080/DeletePlaylistServlet',
+        data: {playlistName: playlistName}
+    });
 }
 function loadPlaylist(playlistName) {
     tracks = [];

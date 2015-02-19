@@ -16,6 +16,17 @@ import java.util.*;
  */
 public class UserDAO {
 
+    private ArrayList<User> usersFound = new ArrayList<>();
+    private ArrayList<Song> songsFound = new ArrayList<>();
+    private ArrayList<Playlist> playlistsFound = new ArrayList<>();
+
+    public void setUsersFound(ArrayList<User> users) { usersFound = users; }
+    public ArrayList<User> getUsersFound() { return usersFound; }
+    public void setSongsFound(ArrayList<Song> songs) { songsFound = songs; }
+    public ArrayList<Song> getSongsFound() { return songsFound; }
+    public void setPlaylistsFound(ArrayList<Playlist> playlists) { playlistsFound = playlists; }
+    public ArrayList<Playlist> getPlaylistsFound() { return playlistsFound; }
+
     /* Method to CREATE a user in the database */
     public User addUser(String username, String password, String name, String lastname, String email){
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -44,15 +55,23 @@ public class UserDAO {
         Transaction tx = null;
         UserSong userSong = new UserSong();
         User user;
+        boolean songAdded = false;
         try{
             tx = session.beginTransaction();
             if (this.isUser(session, username)){
                 user = (User)session.get(User.class, username);
-                user.addUserSong(userSong);
-                userSong.setUser(user);
-                song.addUserSong(userSong);
-                userSong.setSong(song);
-                session.save(userSong);
+                for (Song aSong : this.listSongs(user.getUsername())) {
+                    if (aSong.getTitle().equals(song.getTitle())) {
+                        songAdded = true;
+                    }
+                }
+                if (!songAdded) {
+                    user.addUserSong(userSong);
+                    userSong.setUser(user);
+                    song.addUserSong(userSong);
+                    userSong.setSong(song);
+                    session.save(userSong);
+                }
             }
             tx.commit();
         }catch (HibernateException e) {
@@ -93,6 +112,27 @@ public class UserDAO {
                 user.addPlaylist(playlist);
             }
             tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+    }
+
+    public void setPlaylistSet(String username, Set<Playlist> playlistSet) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        User user;
+        try{
+            tx = session.beginTransaction();
+            if (this.isUser(session, username) && !playlistSet.isEmpty()){
+                user = (User)session.get(User.class, username);
+                for (Playlist playlist : playlistSet) {
+                    user.addPlaylist(playlist);
+                }
+                tx.commit();
+            }
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
             e.printStackTrace();
@@ -431,7 +471,7 @@ public class UserDAO {
         }
     }
     /* Method to delete a PLAYLIST from the user */
-    public void deletePlaylist(String username, Playlist playlist){
+    public void deleteAllPlaylist(String username){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         User user;
@@ -439,10 +479,10 @@ public class UserDAO {
             tx = session.beginTransaction();
             if (this.isUser(session, username)){
                 user = (User)session.get(User.class, username);
-
-                //TENGO Q ENCONTRAR LA PLAYLIST Q VALE
-
-                user.deletePlaylist(playlist);
+                user.deleteAllPlaylists();
+                for (Playlist playlist : this.listPlaylists(username)) {
+                   session.delete(playlist);
+                }
             }
             tx.commit();
         }catch (HibernateException e) {

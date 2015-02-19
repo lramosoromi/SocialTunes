@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/friendHomePage.js"></script>
         <script type="text/javascript" src="js/bootsrap.file-input.js"></script>
     </head>
     <body>
@@ -39,7 +40,10 @@
         <div class="jumbotron">
             <div class="container">
                 <form action="AddFriendServlet" method="post">
-                    <input type="submit" value="AddFriend">
+                    <button type="submit" class="btn btn-primary btn-md">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Add as Friend
+                    </button>
                 </form>
             </div>
         </div>
@@ -64,6 +68,12 @@
                             <c:out value="${ song.getAlbum() }" />
                             Genre:
                             <c:out value="${ song.getGenre() }"/>
+                            Duration:
+                            <c:out value="${ song.getDuration() }"/>
+                            <a href="http://localhost:8080/AddSongServlet" class="btn btn-primary btn-sm" id="${ song.getTitle() }" onclick="setSongTitle(this.id)">
+                                <span class="glyphicon glyphicon-plus"></span>
+                                Add song
+                            </a>
                             <br/>
                         </c:forEach>
                     </div>
@@ -71,9 +81,9 @@
                 <div class="tab-pane fade" id="B">
                     <div id="friends">
                         <c:forEach var="user" items="${ userDAO.listFriends(friend.getUsername()) }">
-                            <c:out value="${ user.getUsername()}"/>
                             <c:out value="${ user.getName()}"/>
                             <c:out value="${ user.getLastName()}"/>
+                            <br/>
                         </c:forEach>
                     </div>
                 </div>

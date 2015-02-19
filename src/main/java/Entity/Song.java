@@ -33,7 +33,7 @@ public class Song {
     @Lob
     private Blob data;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "song")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "song")
     private Set<UserSong> userSongs = new HashSet<>(0);
 
     public Song() { }

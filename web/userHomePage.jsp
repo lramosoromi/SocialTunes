@@ -32,18 +32,18 @@
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Home</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><form class="navbar-form" role="search" action="SearchFriendServlet" method="post">
-                        <div class="input-group">
-                            <input type="text" class="form-control input-sm" placeholder="Search" name="search" id="srch-term">
-                            <label id="friendError" style="color: red"> ${ friendError } </label>
+                <form class="navbar-form navbar-left" role="search" action="SearchServlet" method="get">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" placeholder="Search" name="search" id="srch-term">
+                        <label id="friendError" style="color: red"> ${ friendError } </label>
                             <span class="input-group-btn">
                                 <button class="btn btn-primary btn-md" type="submit">
                                     <span class="glyphicon glyphicon-search"></span>
                                 </button>
                             </span>
-                        </div>
-                    </form></li>
+                    </div>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
                     <li><a href="#" data-toggle="modal" data-target="#userSettingsModal" style="color:#28a4c9"> Settings </a></li>
                     <li><a href="http://localhost:8080/LogoutServlet" style="color:#28a4c9">
                         <span class="glyphicon glyphicon-log-out"></span>

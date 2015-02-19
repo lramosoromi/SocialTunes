@@ -25,7 +25,6 @@ $(document).ready(function() {
             || newPasswordEqual.trim() == "The passwords dose not coincide") {
         $('#userSettingsModal').modal('show');
     }
-
     init();
 });
 
@@ -232,7 +231,7 @@ function deletePlaylist(playlistLongName) {
     $.ajax({
         dataType: 'json',
         type: 'POST',
-        url: 'http://localhost:8080/SetPlaylistAttributeServlet',
+        url: 'http://localhost:8080/DeletePlaylistServlet',
         data: {playlistName: playlistName}
     });
 }
