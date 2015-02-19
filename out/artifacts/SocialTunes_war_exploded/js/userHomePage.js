@@ -30,6 +30,11 @@ $(document).ready(function() {
         $('#searchResultsModal').modal('show');
     }
     init();
+    var auto = setInterval(    function ()
+    {
+        $('#newsFeed').load('newsFeedDiv.jsp').fadeIn("slow");
+    }, 5000); // refresh every 5000 milliseconds
+
 });
 
 function init(){

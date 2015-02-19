@@ -1,9 +1,6 @@
 package EntityDAO;
 
-import Entity.Playlist;
-import Entity.Song;
-import Entity.User;
-import Entity.UserSong;
+import Entity.*;
 import Hibernate.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -27,6 +24,46 @@ public class UserDAO {
     public void setPlaylistsFound(ArrayList<Playlist> playlists) { playlistsFound = playlists; }
     public ArrayList<Playlist> getPlaylistsFound() { return playlistsFound; }
 
+    public UserDAO() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        Newsfeed newsfeed;
+        Long index = Long.valueOf(1);
+        try{
+            tx = session.beginTransaction();
+            newsfeed = (Newsfeed)session.get(Newsfeed.class, index);
+            if (newsfeed == null){
+                newsfeed = new Newsfeed();
+                session.save(newsfeed);
+            }
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+    }
+
+    public Newsfeed getNewsfeed() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        Newsfeed newsfeed = new Newsfeed();
+        Long index = Long.valueOf(1);
+        try{
+            tx = session.beginTransaction();
+            newsfeed = (Newsfeed)session.get(Newsfeed.class, index);
+            if (newsfeed == null){
+                newsfeed = new Newsfeed();
+            }
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+        return newsfeed;
+    }
     /* Method to CREATE a user in the database */
     public User addUser(String username, String password, String name, String lastname, String email){
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -85,12 +122,13 @@ public class UserDAO {
     public void addFriend(String username, User friend){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
-        User user;
+        Newsfeed newsfeed;
+        Long index = Long.valueOf(1);
         try{
             tx = session.beginTransaction();
             if (this.isUser(session, username)){
-                user = (User)session.get(User.class, username);
-                user.addFriend(friend);
+                newsfeed = (Newsfeed)session.get(Newsfeed.class, index);
+                newsfeed.addNews(username + " added " + friend.getUsername() + " as a friend!");
             }
             tx.commit();
         }catch (HibernateException e) {
@@ -160,15 +198,11 @@ public class UserDAO {
                 UserSong userSong = null;
                 for (UserSong aUserSong : user.getUserSongs()){
                     if (aUserSong.getSong().getTitle().compareTo(songTitle) == 0){
+                        aUserSong.addReproduction();
                         userSong = aUserSong;
                     }
                 }
                 user.addLastReproducedSong(userSong);
-            }
-            for (UserSong userSong : user.getUserSongs()){
-                if (userSong.getSong().getTitle().compareTo(songTitle) == 0){
-                    userSong.addReproduction();
-                }
             }
             tx.commit();
         }catch (HibernateException e) {
@@ -442,7 +476,36 @@ public class UserDAO {
         try{
             tx = session.beginTransaction();
             user = (User)session.get(User.class, username);
-            user.setPassword(email);
+            user.setEmail(email);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }
+    }
+
+    public void songListenedUpdate(String username, String songTitle) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        Newsfeed newsfeed;
+        Long index = Long.valueOf(1);
+        boolean oldNews = false;
+        try{
+            tx = session.beginTransaction();
+            newsfeed = (Newsfeed)session.get(Newsfeed.class, index);
+            if (!newsfeed.getNews().isEmpty()) {
+                for (String news : newsfeed.getNews()) {
+                    String lastWord = news.substring(news.lastIndexOf(" ")+1);
+                    if (lastWord.equalsIgnoreCase(songTitle)) {
+                        oldNews = true;
+                    }
+                }
+            }
+            if (!oldNews) {
+                newsfeed.addNews(username + " recently listened to " + songTitle);
+            }
             tx.commit();
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();

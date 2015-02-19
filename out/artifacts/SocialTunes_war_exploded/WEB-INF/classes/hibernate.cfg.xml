@@ -24,5 +24,6 @@
         <mapping class="Entity.Song"/>
         <mapping class="Entity.Playlist"/>
         <mapping class="Entity.UserSong"/>
+        <mapping class="Entity.Newsfeed"/>
     </session-factory>
 </hibernate-configuration>

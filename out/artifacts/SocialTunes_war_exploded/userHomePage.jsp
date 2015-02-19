@@ -58,63 +58,80 @@
     <br/>
     <div class="container">
         <div class="jumbotron">
-            <div class="container">
-                <label>Upload Song:</label>
-                <form enctype = "multipart/form-data" action = "UploadMusicServlet" method = "POST">
-                    <div class="input-prepend">
-                        <input id="fileupload" class="btn btn-primary" title="Browse files" type="file" name="file"/>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="container">
+                        <div class="row">
+                            <div class="container">
+                                <label>Upload Song:</label>
+                                <form enctype = "multipart/form-data" action = "UploadMusicServlet" method = "POST">
+                                    <div class="input-prepend">
+                                        <input id="fileupload" class="btn btn-primary" title="Browse files" type="file" name="file"/>
                         <span class="input-prepend-btn">
                             <button class="btn btn-primary btn-sm btn-success" type="submit">
                                 <span class="glyphicon glyphicon-cloud-upload"></span>
                                 <span>Upload</span>
                             </button>
                         </span>
+                                    </div>
+                                </form>
+                                <label id="uploadSongError" style="color: red"> ${ uploadSongErrorMessage } </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="cwrap">
+                                <div id="nowPlay">
+                                    <label id="npAction">Paused:</label>
+                                    <div id="npTitle"></div>
+                                </div>
+                                <div id="audiowrap">
+                                    <div id="audio0">
+                                        <audio id="audio1" controls="controls">
+                                            Your browser does not support the HTML5 Audio Tag.
+                                        </audio>
+                                    </div>
+                                    <br/>
+                                    <div id="extraControls">
+                                        <label>Playlist</label>
+                                        <br/>
+                                        <a href="#" id="btnPrev" class="btn ctrlbtn btn-lg">
+                                            <span class="glyphicon glyphicon-step-backward"></span>
+                                        </a>
+                                        <a href="#" id="btnNext" class="btn ctrlbtn btn-lg">
+                                            <span class="glyphicon glyphicon-step-forward"></span>
+                                        </a>
+                                        <a href="#" id="btnSave" class="btn" data-toggle="modal" data-target="#savePlaylistModal" onclick="savePlaylist()">
+                                            <span class="glyphicon glyphicon-floppy-save"></span>Save</a>
+                                        <a href="#" id="btnErase" class="btn">
+                                            <span class="glyphicon glyphicon-trash"></span>Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </form>
-                <label id="uploadSongError" style="color: red"> ${ uploadSongErrorMessage } </label>
+                </div>
+                <div class="col-md-6">
+                    NewsFeed:
+                    <div id="newsFeed">
+                        <c:forEach var="news" items="${ userDAO.getNewsfeed().getNews()}">
+                            <c:out value="${ news }"/>
+                            <br/>
+                        </c:forEach>
+                    </div>
+                </div>
             </div>
-
-            <div id="cwrap">
-                <div id="nowPlay">
-                    <label id="npAction">Paused:</label>
-                    <div id="npTitle"></div>
+            <div id="plwrap">
+                <div class="row" id="plHeader">
+                    <div class="col-md-2">Title</div>
+                    <div class="col-md-2">Artist</div>
+                    <div class="col-md-2">Album</div>
+                    <div class="col-md-2">Genre</div>
+                    <div class="col-md-2">Duration</div>
                 </div>
-                <div id="audiowrap">
-                    <div id="audio0">
-                        <audio id="audio1" controls="controls">
-                            Your browser does not support the HTML5 Audio Tag.
-                        </audio>
-                    </div>
-                    <br/>
-                    <div id="extraControls">
-                        <label>Playlist</label>
-                        <br/>
-                        <a href="#" id="btnPrev" class="btn ctrlbtn btn-lg">
-                            <span class="glyphicon glyphicon-step-backward"></span>
-                        </a>
-                        <a href="#" id="btnNext" class="btn ctrlbtn btn-lg">
-                            <span class="glyphicon glyphicon-step-forward"></span>
-                        </a>
-                        <a href="#" id="btnSave" class="btn" data-toggle="modal" data-target="#savePlaylistModal" onclick="savePlaylist()">
-                            <span class="glyphicon glyphicon-floppy-save"></span>Save</a>
-                        <a href="#" id="btnErase" class="btn">
-                            <span class="glyphicon glyphicon-trash"></span>Remove</a>
-                    </div>
-                </div>
-                <div id="plwrap">
-                    <div class="row" id="plHeader">
-                        <div class="col-md-2">Title</div>
-                        <div class="col-md-2">Artist</div>
-                        <div class="col-md-2">Album</div>
-                        <div class="col-md-2">Genre</div>
-                        <div class="col-md-2">Duration</div>
-                    </div>
-                    <ul id="plUL" class="container list-unstyled">
-                    </ul>
-                </div>
+                <ul id="plUL" class="container list-unstyled">
+                </ul>
             </div>
         </div>
-
 
         <div class="container">
             <ul class="nav nav-tabs">

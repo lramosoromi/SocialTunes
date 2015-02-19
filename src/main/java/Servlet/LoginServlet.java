@@ -1,5 +1,6 @@
 package Servlet;
 
+import Entity.Newsfeed;
 import Entity.User;
 import EntityDAO.SongDAO;
 import EntityDAO.UserDAO;

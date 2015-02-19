@@ -29,6 +29,7 @@ public class PlaySongServlet extends HttpServlet {
         String songTitle = (String) request.getSession().getAttribute("songTitle");
 
         if (songTitle != null){
+            userDAO.songListenedUpdate(user.getUsername(), songTitle);
             Song song = userDAO.getSongOfUser(user.getUsername(), songTitle);
 
             int blobLength = 0;
