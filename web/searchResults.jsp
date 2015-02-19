@@ -15,6 +15,8 @@
         <h4 class="modal-title" id="myModalLabel">Search Results</h4>
       </div>
       <div class="modal-body">
+        <label id="introSearch">Search results for: </label>
+        <label id="searchParameter">${ searchParameter }</label>
         <div id="songsFound">
           <h6>Songs:</h6>
           <c:forEach var="song" items="${ userDAO.getSongsFound() }" varStatus="index">
@@ -38,15 +40,18 @@
         </div>
         <div id="friendsFound">
           <h6>Friends:</h6>
-          <c:forEach var="user" items="${ userDAO.listFriends(user.getUsername()) }">
+          <c:forEach var="user" items="${ userDAO.getUsersFound() }">
             <c:out value="${ user.getName()}"/>
             <c:out value="${ user.getLastName()}"/>
+            <a href="http://localhost:8080/AccessFriendPageServlet?<c:out value="${ user.getName()}"/>" class="btn btn-primary btn-sm">
+              Visit Page
+            </a>
             <br/>
           </c:forEach>
         </div>
         <div id="playlistsFound">
           <h6>Playlists:</h6>
-          <c:forEach var="playlist" items="${ userDAO.listPlaylists(user.getUsername()) }">
+          <c:forEach var="playlist" items="${ userDAO.getPlaylistsFound() }">
             <label> <c:out value="${ playlist.getPlaylistName()}"/> </label>
             <a id="${ playlist.getPlaylistName() }" href="#" class="btn btn-primary btn-sm" onclick="loadPlaylist(this.id)">
               <span class="glyphicon glyphicon-play"></span>

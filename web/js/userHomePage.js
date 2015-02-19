@@ -17,6 +17,7 @@ $(document).ready(function() {
     var newEmail = $('#newEmailError').text();
     var newPassword = $('#newPasswrodError').text();
     var newPasswordEqual = $('#newPasswordEqualError').text();
+    var searchParameter = $('#searchParameter').text();
 
     if (playlistName.trim() == "Playlist name already exists for another playlist"){
         $('#savePlaylistModal').modal('show');
@@ -24,6 +25,9 @@ $(document).ready(function() {
     if (newEmail.trim() == "The email is already associated to another user" || newPassword.trim() == "The password si already used by another user"
             || newPasswordEqual.trim() == "The passwords dose not coincide") {
         $('#userSettingsModal').modal('show');
+    }
+    if (searchParameter.length > 0) {
+        $('#searchResultsModal').modal('show');
     }
     init();
 });

@@ -52,9 +52,11 @@ public class SearchServlet extends HttpServlet {
                 playlistsFound.add(playlist);
             }
         }
+        HttpSession session = request.getSession();
         userDAO.setSongsFound(songsFound);
         userDAO.setUsersFound(friendsFound);
         userDAO.setPlaylistsFound(playlistsFound);
+        session.setAttribute("searchParameter", searchString);
         request.getRequestDispatcher("/userHomePage.jsp").forward(request,response);
     }
 }

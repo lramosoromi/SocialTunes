@@ -2,6 +2,7 @@
 <jsp:useBean id="user" scope="session" class="Entity.User"/>
 <jsp:useBean id="userDAO" scope="session" class="EntityDAO.UserDAO"/>
 <jsp:useBean id="songDAO" scope="session" class="EntityDAO.SongDAO"/>
+<jsp:useBean id="searchParameter" scope="session" class="java.lang.String"/>
 <%--
   Created by IntelliJ IDEA.
   User: skylight
@@ -12,6 +13,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="savePlaylist.jsp"%>
 <%@include file="userSettings.jsp"%>
+<%@include file="searchResults.jsp"%>
 <html>
     <head>
         <title> User Home Page </title>
@@ -217,6 +219,10 @@
                         <c:forEach var="user" items="${ userDAO.listFriends(user.getUsername()) }">
                             <c:out value="${ user.getName()}"/>
                             <c:out value="${ user.getLastName()}"/>
+                            <a href="http://localhost:8080/AccessFriendPageServlet?<c:out value="${ user.getName()}"/>"
+                               class="btn btn-primary btn-sm">
+                                Visit Page
+                            </a>
                             <br/>
                         </c:forEach>
                     </div>
