@@ -158,26 +158,6 @@ public class UserDAO {
         }
     }
 
-    public void setPlaylistSet(String username, Set<Playlist> playlistSet) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = null;
-        User user;
-        try{
-            tx = session.beginTransaction();
-            if (this.isUser(session, username) && !playlistSet.isEmpty()){
-                user = (User)session.get(User.class, username);
-                for (Playlist playlist : playlistSet) {
-                    user.addPlaylist(playlist);
-                }
-                tx.commit();
-            }
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace();
-        }finally {
-            session.close();
-        }
-    }
     public void addReproduction(String username, String songTitle){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
@@ -497,8 +477,7 @@ public class UserDAO {
             newsfeed = (Newsfeed)session.get(Newsfeed.class, index);
             if (!newsfeed.getNews().isEmpty()) {
                 for (String news : newsfeed.getNews()) {
-                    String lastWord = news.substring(news.lastIndexOf(" ")+1);
-                    if (lastWord.equalsIgnoreCase(songTitle)) {
+                    if (news.contains(songTitle)) {
                         oldNews = true;
                     }
                 }
@@ -534,18 +513,22 @@ public class UserDAO {
         }
     }
     /* Method to delete a PLAYLIST from the user */
-    public void deleteAllPlaylist(String username){
+    public void deletePlaylist(String username, String playlistName){
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
+        ArrayList<Playlist> playlists = this.listPlaylists(username);
         User user;
+        Playlist playlistToRemove = null;
         try{
             tx = session.beginTransaction();
             if (this.isUser(session, username)){
                 user = (User)session.get(User.class, username);
-                user.deleteAllPlaylists();
-                for (Playlist playlist : this.listPlaylists(username)) {
-                   session.delete(playlist);
+                for (Playlist playlist : playlists) {
+                   if (playlist.getPlaylistName().equalsIgnoreCase(playlistName)) {
+                       playlistToRemove = playlist;
+                   }
                 }
+                user.deletePlaylists(playlistToRemove);
             }
             tx.commit();
         }catch (HibernateException e) {

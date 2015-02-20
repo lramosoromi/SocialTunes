@@ -3,6 +3,7 @@ package Entity;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -48,7 +49,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "USER_PLAYLIST", joinColumns = { @JoinColumn(name = "username") },
             inverseJoinColumns = { @JoinColumn(name = "playlistName") })
-    private Set<Playlist> playlists = new HashSet<>(0);
+    private List<Playlist> playlists = new ArrayList<>(0);
 
 
     public User(){}
@@ -87,13 +88,17 @@ public class User {
     public Set<User> getFriendsOf() { return friendsOf; }
     public void setFriendsOf(Set<User> friendsOf) { this.friendsOf = friendsOf; }
 
-    public Set<Playlist> getPlaylists() { return playlists; }
-    public void setPlaylists(Set<Playlist> playLists) { this.playlists = playLists; }
+    public List<Playlist> getPlaylists() { return playlists; }
+    public void setPlaylists(List<Playlist> playLists) { this.playlists = playLists; }
     public void addPlaylist(Playlist playlist) { playlists.add(playlist); }
-    public void deleteAllPlaylists() {
-        for (Playlist playlist : playlists) {
-            playlist.erase();
+    public void deletePlaylists(Playlist playlist) {
+        Playlist aPlaylist = null;
+        for (Playlist playlist1 : playlists) {
+            if (playlist1.getPlaylistName().equalsIgnoreCase(playlist.getPlaylistName())) {
+                aPlaylist = playlist1;
+                break;
+            }
         }
-        playlists.clear();
+        playlists.remove(aPlaylist);
     }
 }
